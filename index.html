@@ -1,151 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Nitin Sharma</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 40px 200px;
-            color: #333;
-        }
-
-        h1, h2 {
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 40px;
-            margin-bottom: 5px;
-        }
-
-        h2 {
-            font-size: 22px;
-            margin-top: 30px;
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 5px;
-        }
-
-        p.contact {
-            text-align: center;
-            font-size: 16px;
-        }
-
-        ul {
-            margin-top: 5px;
-            padding-left: 20px;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        td {
-            vertical-align: top;
-        }
-
-        .job-title {
-            font-style: italic;
-            font-weight: bold;
-        }
-
-        .project {
-            font-style: italic;
-        }
-
-        .section {
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nitin Sharma | Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
-
 <body>
-
-    <h1>Nitin Sharma</h1>
-    <p class="contact">
-        Mexico City | +52 5514778008 | 
-        <a href="mailto:mr.nitinsharma07@gmail.com">mr.nitinsharma07@gmail.com</a> | 
+  <header class="site-header">
+    <div class="container header">
+      <h1>Nitin Sharma</h1>
+      <p class="contact">
+        Mexico City | +52 5514778008 |
+        <a href="mailto:mr.nitinsharma07@gmail.com">mr.nitinsharma07@gmail.com</a> |
         <a href="https://www.linkedin.com/in/nitinsharma74/">LinkedIn</a>
-    </p>
-
-    <div class="section">
-        <h2>Professional Summary</h2>
-        <p>
-            Software Engineer with 6+ years of experience specializing in backend development, cloud architecture, and generative AI solutions. Proven expertise in AWS technologies including Amazon Bedrock, with hands-on experience developing AI agents for automated data quality investigations and intelligent query generation. Skilled in building scalable ETL pipelines, implementing SRE practices, and leveraging AI tools to enhance operational efficiency. Strong track record of delivering impactful solutions that improve system reliability and reduce costs.
-        </p>
+      </p>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#summary">Summary</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="section">
-        <h2>Professional Experience</h2>
-        <table>
-            <tr>
-                <td><strong>Amazon Music</strong></td>
-                <td style="text-align:right;">Mexico City, Mexico</td>
-            </tr>
-            <tr>
-                <td class="job-title">Programmer Analyst II</td>
-                <td style="text-align:right;">May 2022 – Present</td>
-            </tr>
-            <tr>
-                <td class="project">Project: Amazon Music Data Operations & Infrastructure Efficiency</td>
-            </tr>
-        </table>
-        <ul>
-            <li>Led initiatives to detect, prevent, and resolve data quality issues by developing automated validation frameworks and backend services, reducing financial discrepancies and improving customer experience.</li>
-            <li>Built and deployed data quality monitoring tools in collaboration with cross-functional teams, enabling early detection of 95% of issues within 24 hours and improving accuracy and customer satisfaction.</li>
-            <li>Engineered and refined rule-based and behavioral checks within distributed systems to improve detection precision and operational efficiency.</li>
-            <li>Collaborated with teams to optimize cloud infrastructure, improving resource utilization and reducing AWS costs.</li>
-            <li>Designed and implemented scalable ETL pipelines using AWS services for efficient data processing and real-time analytics.</li>
-            <li>Developed intelligent AI agents using Amazon Bedrock to automate data quality investigations, implementing NLP for query generation and root cause analysis, reducing manual investigation time by over 50%.</li>
-            <li>Developed automated tools leveraging Generative AI for query generation, CloudWatch alarm analysis, and AWS cost optimization.</li>
-        </ul>
+  <main class="container">
+    <section id="summary" class="section">
+      <h2>Professional Summary</h2>
+      <p>
+        Software Engineer with 7+ years of experience specializing in backend
+        development, cloud architecture, and generative AI solutions. Proven
+        expertise in AWS technologies including Amazon Bedrock, with hands-on
+        experience developing AI agents for automated data quality investigations
+        and intelligent query generation. Skilled in building scalable ETL
+        pipelines, implementing SRE practices, and leveraging AI tools to enhance
+        operational efficiency. Strong track record of delivering impactful
+        solutions that improve system reliability and reduce costs.
+      </p>
+    </section>
 
-        <table>
-            <tr>
-                <td><strong>Infosys Ltd.</strong></td>
-                <td style="text-align:right;">Chandigarh, India / Mexico City, Mexico</td>
-            </tr>
-            <tr>
-                <td class="job-title">Technology Analyst</td>
-                <td style="text-align:right;">Sep 2018 – May 2022</td>
-            </tr>
-            <tr>
-                <td class="project">Project: Morgan Stanley Smith Barney – Global Banking Technology</td>
-            </tr>
-        </table>
-        <ul>
-            <li>Key contributor to Morgan Stanley’s Global Banking Technology Team, overseeing multiple Banking and Payment Services applications.</li>
-            <li>Conducted Root Cause Analysis for production issues, resolving core problems to enhance system reliability and performance.</li>
-            <li>Automated repetitive tasks, eliminating manual processes and streamlining workflows, improving operational efficiency.</li>
-            <li>Developed and enhanced applications using Python, Angular, Flask, DB2, and MySQL, delivering scalable and optimized solutions.</li>
-            <li>Implemented Site Reliability Engineering (SRE) practices achieving 99.99% system availability.</li>
-            <li>Integrated monitoring tools (ServiceNow, AppDynamics, Splunk, Autosys, Kafka, Load Balancers) for proactive issue detection.</li>
-            <li>Managed Technology Change Management and Release Planning, ensuring smooth operations and minimizing disruptions.</li>
-        </ul>
-    </div>
+    <section id="experience" class="section">
+      <h2>Professional Experience</h2>
+      <table>
+        <tr>
+          <td><strong>Amazon Music</strong></td>
+          <td style="text-align:right;">Mexico City, Mexico</td>
+        </tr>
+        <tr>
+          <td class="job-title">Programmer Analyst II</td>
+          <td style="text-align:right;">May 2022 - Present</td>
+        </tr>
+        <tr>
+          <td class="project">Project: Amazon Music Data Operations & Infrastructure Efficiency</td>
+        </tr>
+      </table>
+      <ul>
+        <li>Led initiatives to detect, prevent, and resolve data quality issues by developing automated validation frameworks and backend services, reducing financial discrepancies and improving customer experience.</li>
+        <li>Built and deployed data quality monitoring tools in collaboration with cross-functional teams, enabling early detection of 95% of issues within 24 hours and improving accuracy and customer satisfaction.</li>
+        <li>Engineered and refined rule-based and behavioral checks within distributed systems to improve detection precision and operational efficiency.</li>
+        <li>Collaborated with teams to optimize cloud infrastructure, improving resource utilization and reducing AWS costs.</li>
+        <li>Designed and implemented scalable ETL pipelines using AWS services for efficient data processing and real-time analytics.</li>
+        <li>Developed intelligent AI agents using Amazon Bedrock to automate data quality investigations, implementing NLP for query generation and root cause analysis, reducing manual investigation time by over 50%.</li>
+        <li>Developed automated tools leveraging Generative AI for query generation, CloudWatch alarm analysis, and AWS cost optimization.</li>
+      </ul>
 
-    <div class="section">
-        <h2>Skills</h2>
-        <ul>
-            <li><strong>AI/ML & Generative AI:</strong> Amazon Bedrock, SageMaker, AI Agent Development, NLP</li>
-            <li><strong>Programming Languages:</strong> Python, Java, TypeScript, SQL</li>
-            <li><strong>Cloud & Infrastructure:</strong> AWS (Lambda, S3, SQS, SNS, RDS, Athena, QuickSight, EventBridge, Kinesis, EMR), CloudFormation</li>
-            <li><strong>Web Technologies:</strong> React, Angular, Flask</li>
-            <li><strong>Monitoring & Analytics:</strong> CloudWatch, AppDynamics, Splunk</li>
-            <li><strong>Databases:</strong> MySQL, DB2, PostgreSQL</li>
-            <li><strong>Version Control:</strong> Git, GitHub, BitBucket</li>
-        </ul>
-    </div>
+      <table>
+        <tr>
+          <td><strong>Infosys Ltd.</strong></td>
+          <td style="text-align:right;">Chandigarh, India / Mexico City, Mexico</td>
+        </tr>
+        <tr>
+          <td class="job-title">Technology Analyst</td>
+          <td style="text-align:right;">Sep 2018 - May 2022</td>
+        </tr>
+        <tr>
+          <td class="project">Project: Morgan Stanley Smith Barney - Global Banking Technology</td>
+        </tr>
+      </table>
+      <ul>
+        <li>Key contributor to Morgan Stanley's Global Banking Technology Team, overseeing multiple Banking and Payment Services applications.</li>
+        <li>Conducted Root Cause Analysis for production issues, resolving core problems to enhance system reliability and performance.</li>
+        <li>Automated repetitive tasks, eliminating manual processes and streamlining workflows, improving operational efficiency.</li>
+        <li>Developed and enhanced applications using Python, Angular, Flask, DB2, and MySQL, delivering scalable and optimized solutions.</li>
+        <li>Implemented Site Reliability Engineering (SRE) practices achieving 99.99% system availability.</li>
+        <li>Integrated monitoring tools (ServiceNow, AppDynamics, Splunk, Autosys, Kafka, Load Balancers) for proactive issue detection.</li>
+        <li>Managed Technology Change Management and Release Planning, ensuring smooth operations and minimizing disruptions.</li>
+      </ul>
+    </section>
 
-    <div class="section">
-        <h2>Education</h2>
-        <ul>
-            <li>B.Tech, Computer Science and Engineering | Dr. APJ Abdul Kalam Technical University | 2018</li>
-        </ul>
-    </div>
+    <section id="skills" class="section">
+      <h2>Skills</h2>
+      <ul>
+        <li><strong>AI/ML & Generative AI:</strong> Amazon Bedrock, SageMaker, AI Agent Development, NLP</li>
+        <li><strong>Programming Languages:</strong> Python, Java, TypeScript, SQL</li>
+        <li><strong>Cloud & Infrastructure:</strong> AWS (Lambda, S3, SQS, SNS, RDS, Athena, QuickSight, EventBridge, Kinesis, EMR), CloudFormation</li>
+        <li><strong>Web Technologies:</strong> React, Angular, Flask</li>
+        <li><strong>Monitoring & Analytics:</strong> CloudWatch, AppDynamics, Splunk</li>
+        <li><strong>Databases:</strong> MySQL, DB2, PostgreSQL</li>
+        <li><strong>Version Control:</strong> Git, GitHub, BitBucket</li>
+      </ul>
+    </section>
 
+    <section id="education" class="section">
+      <h2>Education</h2>
+      <ul>
+        <li>B.Tech, Computer Science and Engineering | Dr. APJ Abdul Kalam Technical University | 2018</li>
+      </ul>
+    </section>
+
+    <section id="contact" class="section">
+      <h2>Contact</h2>
+      <p>
+        Email: <a href="mailto:mr.nitinsharma07@gmail.com">mr.nitinsharma07@gmail.com</a><br />
+        LinkedIn: <a href="https://www.linkedin.com/in/nitinsharma74/">linkedin.com/in/nitinsharma74</a><br />
+        Location: Mexico City
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Simple, clear, and ready to iterate.</div>
+  </footer>
 </body>
 </html>
