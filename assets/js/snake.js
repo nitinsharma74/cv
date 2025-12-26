@@ -13,6 +13,8 @@ let snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
 let apple = { x: 320, y: 320 };
 let score = 0;
 let best = 0;
+const swipeThreshold = 24;
+let touchStart = null;
 
 const scoreEl = document.getElementById("score");
 const bestEl = document.getElementById("best");
@@ -72,23 +74,53 @@ function loop() {
   });
 }
 
+function setDirection(dx, dy) {
+  if (dx !== 0 && snake.dx === 0) {
+    snake.dx = dx;
+    snake.dy = 0;
+  }
+  if (dy !== 0 && snake.dy === 0) {
+    snake.dy = dy;
+    snake.dx = 0;
+  }
+}
+
 document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowLeft" && snake.dx === 0) {
-    snake.dx = -grid;
-    snake.dy = 0;
-  }
-  if (e.key === "ArrowUp" && snake.dy === 0) {
-    snake.dy = -grid;
-    snake.dx = 0;
-  }
-  if (e.key === "ArrowRight" && snake.dx === 0) {
-    snake.dx = grid;
-    snake.dy = 0;
-  }
-  if (e.key === "ArrowDown" && snake.dy === 0) {
-    snake.dy = grid;
-    snake.dx = 0;
-  }
+  if (e.key === "ArrowLeft") setDirection(-grid, 0);
+  if (e.key === "ArrowUp") setDirection(0, -grid);
+  if (e.key === "ArrowRight") setDirection(grid, 0);
+  if (e.key === "ArrowDown") setDirection(0, grid);
 });
+
+function onTouchStart(e) {
+  if (!e.touches || e.touches.length === 0) return;
+  const touch = e.touches[0];
+  touchStart = { x: touch.clientX, y: touch.clientY };
+}
+
+function onTouchMove(e) {
+  if (!touchStart) return;
+  e.preventDefault();
+}
+
+function onTouchEnd(e) {
+  if (!touchStart || !e.changedTouches || e.changedTouches.length === 0) return;
+  const touch = e.changedTouches[0];
+  const dx = touch.clientX - touchStart.x;
+  const dy = touch.clientY - touchStart.y;
+  touchStart = null;
+
+  if (Math.abs(dx) < swipeThreshold && Math.abs(dy) < swipeThreshold) return;
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    setDirection(dx > 0 ? grid : -grid, 0);
+  } else {
+    setDirection(0, dy > 0 ? grid : -grid);
+  }
+}
+
+canvas.addEventListener("touchstart", onTouchStart, { passive: true });
+canvas.addEventListener("touchmove", onTouchMove, { passive: false });
+canvas.addEventListener("touchend", onTouchEnd);
 
 requestAnimationFrame(loop);

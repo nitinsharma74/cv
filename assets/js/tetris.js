@@ -63,6 +63,8 @@ let best = 0;
 let score = 0;
 let lastTime = 0;
 let dropCounter = 0;
+const swipeThreshold = 24;
+let touchStart = null;
 
 function createMatrix(width, height) {
   const matrix = [];
@@ -227,3 +229,39 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowDown") playerDrop();
   if (e.key === "ArrowUp") playerRotate();
 });
+
+function onTouchStart(e) {
+  if (!e.touches || e.touches.length === 0) return;
+  const touch = e.touches[0];
+  touchStart = { x: touch.clientX, y: touch.clientY };
+}
+
+function onTouchMove(e) {
+  if (!touchStart) return;
+  e.preventDefault();
+}
+
+function onTouchEnd(e) {
+  if (!touchStart || !e.changedTouches || e.changedTouches.length === 0) return;
+  const touch = e.changedTouches[0];
+  const dx = touch.clientX - touchStart.x;
+  const dy = touch.clientY - touchStart.y;
+  touchStart = null;
+
+  if (Math.abs(dx) < swipeThreshold && Math.abs(dy) < swipeThreshold) {
+    playerRotate();
+    return;
+  }
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    playerMove(dx > 0 ? 1 : -1);
+  } else if (dy > 0) {
+    playerDrop();
+  } else {
+    playerRotate();
+  }
+}
+
+canvas.addEventListener("touchstart", onTouchStart, { passive: true });
+canvas.addEventListener("touchmove", onTouchMove, { passive: false });
+canvas.addEventListener("touchend", onTouchEnd);
