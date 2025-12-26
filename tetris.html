@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tetris | Nitin Sharma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="assets/css/game.css" />
+</head>
+<body>
+  <main class="page">
+    <div class="card game-card">
+      <h1>Tetris</h1>
+      <p>Rotate with up arrow. Move with left/right. Drop with down.</p>
+      <canvas id="tetris" width="400" height="400" aria-label="Tetris game board">
+        Your browser does not support the canvas element.
+      </canvas>
+      <div class="scoreboard">
+        <span>Score: <strong id="score">0</strong></span>
+        <span>Best: <strong id="best">0</strong></span>
+      </div>
+      <a class="back-link" href="index.html">Back to site</a>
+    </div>
+  </main>
+
+  <script src="assets/js/tetris.js" defer></script>
+</body>
+</html>
