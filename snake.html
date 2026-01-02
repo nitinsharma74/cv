@@ -1,33 +1,307 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Snake Game | Nitin Sharma</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nitin Sharma | Snake</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@300;400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="assets/css/game.css" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
-<body>
-  <main class="page">
-    <div class="card game-card">
-      <h1>Snake Game</h1>
-      <p>Use your arrow keys to move. On mobile, swipe to steer.</p>
-      <canvas id="game" width="400" height="400" aria-label="Snake game board">
-        Your browser does not support the canvas element.
-      </canvas>
-      <div class="scoreboard">
-        <span>Score: <strong id="score">0</strong></span>
-        <span>Best: <strong id="best">0</strong></span>
+<body class="home">
+  <div class="wrap">
+    <main class="terminal scanlines terminal-square" role="region" aria-label="Terminal">
+      <div class="bar">
+        <div class="dots" aria-hidden="true">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+        <div class="title">nitinsharma74@github</div>
       </div>
-      <a class="back-link" href="index.html">Back to site</a>
-    </div>
-  </main>
 
-  <script src="assets/js/snake.js" defer></script>
+      <div class="content">
+        <section class="section" aria-labelledby="snake-title">
+          <div class="line">
+            <span class="prompt" id="snake-title">
+              <span class="prompt-user">nitinsharma74@github</span>
+              <span class="prompt-sym">$</span>
+            </span>
+            <span class="cmd">./play snake</span>
+          </div>
+          <div class="out game">
+            <div class="game-header">
+              <div class="game-score">
+                Score: <span id="snake-score">0</span>
+              </div>
+              <div class="game-status" id="snake-status">Ready</div>
+            </div>
+            <canvas
+              id="snake-canvas"
+              class="game-canvas"
+              width="570"
+              height="360"
+              aria-label="Snake game board"
+              role="img"
+            ></canvas>
+            <div class="game-controls">
+              <span class="game-hint game-hint-block">
+                Use arrow keys, WASD, or swipe to play
+              </span>
+              <span class="game-hint game-hint-block">
+                Press Esc or tap the board to pause/resume
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <div class="hr"></div>
+
+        <div class="line">
+          <span class="prompt">
+            <span class="prompt-user">nitinsharma74@github</span>
+            <span class="prompt-sym">$</span>
+          </span>
+          <a class="cmd" href="index.html">cd ~ &amp;&amp; open index.html</a>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">© 2025 Nitin Sharma</footer>
+  </div>
+  <script>
+    (() => {
+      const canvas = document.getElementById("snake-canvas");
+      const scoreEl = document.getElementById("snake-score");
+      const statusEl = document.getElementById("snake-status");
+      if (!canvas) return;
+
+      const ctx = canvas.getContext("2d");
+      const targetCellSize = 20;
+      const gridCols = Math.max(12, Math.floor(canvas.width / targetCellSize));
+      const gridRows = Math.max(12, Math.floor(canvas.height / targetCellSize));
+      const cellSize = Math.floor(
+        Math.min(canvas.width / gridCols, canvas.height / gridRows)
+      );
+      canvas.width = gridCols * cellSize;
+      canvas.height = gridRows * cellSize;
+
+      const colors = {
+        snake: "#34ff7a",
+        head: "#b7f7c1",
+        food: "#77c78b",
+        grid: "rgba(52, 255, 122, 0.12)",
+        bg: "#070b0c",
+      };
+
+      let snake = [];
+      let direction = { x: 1, y: 0 };
+      let nextDirection = { x: 1, y: 0 };
+      let food = { x: 8, y: 8 };
+      let score = 0;
+      let running = false;
+      let gameOver = false;
+      let intervalId = null;
+      let touchStart = null;
+
+      const setStatus = (text) => {
+        statusEl.textContent = text;
+      };
+
+      const resetGame = () => {
+        const startX = Math.floor(gridCols / 3);
+        const startY = Math.floor(gridRows / 2);
+        snake = [
+          { x: startX, y: startY },
+          { x: startX - 1, y: startY },
+          { x: startX - 2, y: startY },
+        ];
+        direction = { x: 1, y: 0 };
+        nextDirection = { x: 1, y: 0 };
+        score = 0;
+        scoreEl.textContent = "0";
+        gameOver = false;
+        placeFood();
+        draw();
+        setStatus("Ready");
+      };
+
+      const placeFood = () => {
+        let x = 0;
+        let y = 0;
+        do {
+          x = Math.floor(Math.random() * gridCols);
+          y = Math.floor(Math.random() * gridRows);
+        } while (snake.some((segment) => segment.x === x && segment.y === y));
+        food = { x, y };
+      };
+
+      const drawCell = (x, y, color) => {
+        ctx.fillStyle = color;
+        ctx.fillRect(x * cellSize + 1, y * cellSize + 1, cellSize - 2, cellSize - 2);
+      };
+
+      const draw = () => {
+        ctx.fillStyle = colors.bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = colors.grid;
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= gridCols; i += 1) {
+          const offset = i * cellSize + 0.5;
+          ctx.beginPath();
+          ctx.moveTo(offset, 0);
+          ctx.lineTo(offset, canvas.height);
+          ctx.stroke();
+        }
+        for (let i = 0; i <= gridRows; i += 1) {
+          const offset = i * cellSize + 0.5;
+          ctx.beginPath();
+          ctx.moveTo(0, offset);
+          ctx.lineTo(canvas.width, offset);
+          ctx.stroke();
+        }
+
+        drawCell(food.x, food.y, colors.food);
+
+        snake.forEach((segment, index) => {
+          drawCell(segment.x, segment.y, index === 0 ? colors.head : colors.snake);
+        });
+      };
+
+      const step = () => {
+        direction = nextDirection;
+        const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+
+        if (head.x < 0) head.x = gridCols - 1;
+        if (head.x >= gridCols) head.x = 0;
+        if (head.y < 0) head.y = gridRows - 1;
+        if (head.y >= gridRows) head.y = 0;
+
+        if (snake.some((segment) => segment.x === head.x && segment.y === head.y)) {
+          endGame();
+          return;
+        }
+
+        snake.unshift(head);
+
+        if (head.x === food.x && head.y === food.y) {
+          score += 1;
+          scoreEl.textContent = String(score);
+          placeFood();
+        } else {
+          snake.pop();
+        }
+
+        draw();
+      };
+
+      const startGame = () => {
+        if (running) return;
+        if (gameOver) resetGame();
+        running = true;
+        setStatus("Running");
+        intervalId = window.setInterval(step, 120);
+      };
+
+      const pauseGame = () => {
+        if (!running) return;
+        running = false;
+        window.clearInterval(intervalId);
+        setStatus("Paused");
+      };
+
+      const endGame = () => {
+        running = false;
+        gameOver = true;
+        window.clearInterval(intervalId);
+        setStatus("Game over");
+      };
+
+      const handleDirection = (x, y) => {
+        if (direction.x === -x && direction.y === -y) return;
+        nextDirection = { x, y };
+        if (!running) startGame();
+      };
+
+      document.addEventListener("keydown", (event) => {
+        switch (event.key) {
+          case "Escape":
+            if (gameOver) return;
+            if (running) {
+              pauseGame();
+            } else {
+              startGame();
+            }
+            break;
+          case "ArrowUp":
+          case "w":
+          case "W":
+            handleDirection(0, -1);
+            break;
+          case "ArrowDown":
+          case "s":
+          case "S":
+            handleDirection(0, 1);
+            break;
+          case "ArrowLeft":
+          case "a":
+          case "A":
+            handleDirection(-1, 0);
+            break;
+          case "ArrowRight":
+          case "d":
+          case "D":
+            handleDirection(1, 0);
+            break;
+          default:
+            break;
+        }
+      });
+
+      const handleSwipe = (start, end) => {
+        const dx = end.x - start.x;
+        const dy = end.y - start.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance < 20) return;
+        if (Math.abs(dx) > Math.abs(dy)) {
+          handleDirection(dx > 0 ? 1 : -1, 0);
+        } else {
+          handleDirection(0, dy > 0 ? 1 : -1);
+        }
+      };
+
+      canvas.addEventListener("touchstart", (event) => {
+        const touch = event.touches[0];
+        touchStart = { x: touch.clientX, y: touch.clientY };
+      });
+
+      const togglePause = () => {
+        if (gameOver) return;
+        if (running) {
+          pauseGame();
+        } else {
+          startGame();
+        }
+      };
+
+      canvas.addEventListener("touchend", (event) => {
+        if (!touchStart) return;
+        const touch = event.changedTouches[0];
+        const end = { x: touch.clientX, y: touch.clientY };
+        const dx = end.x - touchStart.x;
+        const dy = end.y - touchStart.y;
+        if (Math.hypot(dx, dy) < 20) {
+          togglePause();
+        } else {
+          handleSwipe(touchStart, end);
+        }
+        touchStart = null;
+      });
+
+      resetGame();
+    })();
+  </script>
 </body>
 </html>
