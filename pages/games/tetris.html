@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nitin Sharma | Sr. Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+</head>
+<body class="home game-page">
+  <div class="wrap">
+    <div class="terminal-wrap">
+      <main class="terminal scanlines terminal-square" role="region" aria-label="Terminal">
+        <div class="bar">
+          <div class="dots" aria-hidden="true">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+          <div class="title">nitinsharma74@github</div>
+        </div>
+
+        <div class="content">
+          <section class="section" aria-labelledby="tetris-title">
+            <div class="line">
+              <span class="prompt" id="tetris-title">
+                <span class="prompt-user">nitinsharma74@github</span>
+                <span class="prompt-sym">$</span>
+              </span>
+              <span class="cmd">./play tetris</span>
+            </div>
+            <div class="out game">
+              <div class="game-header">
+                <div class="game-score">
+                  Score: <span id="tetris-score">0</span>
+                </div>
+                <div class="game-status" id="tetris-status">Ready</div>
+              </div>
+              <canvas
+                id="tetris-canvas"
+                class="game-canvas"
+                width="570"
+                height="360"
+                aria-label="Tetris game board"
+                role="img"
+              ></canvas>
+              <div class="game-controls">
+                <span class="game-hint game-hint-block">
+                  Arrow keys to move, Up to rotate, Space to drop. Press Esc to pause/resume
+                </span>
+                <span class="game-hint game-hint-block">
+                  Swipe to move, swipe up to rotate, tap to pause/resume
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <div class="hr"></div>
+
+          <div class="line">
+            <span class="prompt">
+              <span class="prompt-user">nitinsharma74@github</span>
+              <span class="prompt-sym">$</span>
+            </span>
+            <a class="cmd" href="../../index.html">cd ~ &amp;&amp; open index.html</a>
+          </div>
+        </div>
+      </main>
+    </div>
+    <footer class="footer">© 2025 Nitin Sharma</footer>
+  </div>
+  <script>
+    (() => {
+      const canvas = document.getElementById("tetris-canvas");
+      const scoreEl = document.getElementById("tetris-score");
+      const statusEl = document.getElementById("tetris-status");
+      if (!canvas) return;
+
+      const ctx = canvas.getContext("2d");
+      const targetCellSize = 20;
+      const rows = Math.max(12, Math.floor(canvas.height / targetCellSize));
+      const cols = Math.max(10, Math.floor(canvas.width / targetCellSize));
+      const cellSize = Math.floor(
+        Math.min(canvas.width / cols, canvas.height / rows)
+      );
+      canvas.width = cols * cellSize;
+      canvas.height = rows * cellSize;
+      const offsetX = 0;
+      const offsetY = 0;
+
+      const colors = {
+        I: "#6ad5ff",
+        O: "#ffe873",
+        T: "#c7a4ff",
+        S: "#77e57f",
+        Z: "#ff8a8a",
+        J: "#8fb0ff",
+        L: "#ffc07a",
+        grid: "rgba(52, 255, 122, 0.12)",
+        bg: "#070b0c",
+      };
+
+      const shapes = {
+        I: [[1, 1, 1, 1]],
+        O: [[1, 1], [1, 1]],
+        T: [[0, 1, 0], [1, 1, 1]],
+        S: [[0, 1, 1], [1, 1, 0]],
+        Z: [[1, 1, 0], [0, 1, 1]],
+        J: [[1, 0, 0], [1, 1, 1]],
+        L: [[0, 0, 1], [1, 1, 1]],
+      };
+
+      let board = [];
+      let piece = null;
+      let score = 0;
+      let running = false;
+      let paused = false;
+      let intervalId = null;
+
+      const setStatus = (text) => {
+        statusEl.textContent = text;
+      };
+
+      const resetBoard = () => {
+        board = Array.from({ length: rows }, () => Array(cols).fill(null));
+      };
+
+      const randomPiece = () => {
+        const keys = Object.keys(shapes);
+        const type = keys[Math.floor(Math.random() * keys.length)];
+        const matrix = shapes[type].map((row) => row.slice());
+        return {
+          type,
+          matrix,
+          x: Math.floor(cols / 2) - Math.ceil(matrix[0].length / 2),
+          y: -1,
+        };
+      };
+
+      const collide = (testPiece) => {
+        for (let y = 0; y < testPiece.matrix.length; y += 1) {
+          for (let x = 0; x < testPiece.matrix[y].length; x += 1) {
+            if (!testPiece.matrix[y][x]) continue;
+            const boardX = testPiece.x + x;
+            const boardY = testPiece.y + y;
+            if (boardX < 0 || boardX >= cols || boardY >= rows) return true;
+            if (boardY >= 0 && board[boardY][boardX]) return true;
+          }
+        }
+        return false;
+      };
+
+      const merge = () => {
+        for (let y = 0; y < piece.matrix.length; y += 1) {
+          for (let x = 0; x < piece.matrix[y].length; x += 1) {
+            if (!piece.matrix[y][x]) continue;
+            const boardY = piece.y + y;
+            if (boardY >= 0) {
+              board[boardY][piece.x + x] = piece.type;
+            }
+          }
+        }
+      };
+
+      const rotate = (matrix) => {
+        const rotated = matrix[0].map((_, i) => matrix.map((row) => row[i]).reverse());
+        return rotated;
+      };
+
+      const tryRotate = () => {
+        const rotated = rotate(piece.matrix);
+        const kicks = [0, -1, 1, -2, 2];
+        for (const kick of kicks) {
+          const testPiece = { ...piece, matrix: rotated, x: piece.x + kick };
+          if (!collide(testPiece)) {
+            piece.matrix = rotated;
+            piece.x += kick;
+            return;
+          }
+        }
+      };
+
+      const clearLines = () => {
+        let cleared = 0;
+        for (let y = rows - 1; y >= 0; y -= 1) {
+          if (board[y].every((cell) => cell)) {
+            board.splice(y, 1);
+            board.unshift(Array(cols).fill(null));
+            cleared += 1;
+            y += 1;
+          }
+        }
+        if (cleared > 0) {
+          score += cleared * 100;
+          scoreEl.textContent = String(score);
+        }
+      };
+
+      const drop = () => {
+        piece.y += 1;
+        if (collide(piece)) {
+          piece.y -= 1;
+          merge();
+          clearLines();
+          piece = randomPiece();
+          if (collide(piece)) {
+            stopGame("Game over");
+          }
+        }
+      };
+
+      const hardDrop = () => {
+        while (!collide(piece)) {
+          piece.y += 1;
+        }
+        piece.y -= 1;
+        drop();
+      };
+
+      const drawCell = (x, y, color) => {
+        ctx.fillStyle = color;
+        ctx.fillRect(
+          offsetX + x * cellSize,
+          offsetY + y * cellSize,
+          cellSize - 1,
+          cellSize - 1
+        );
+      };
+
+      const draw = () => {
+        ctx.fillStyle = colors.bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = colors.grid;
+        for (let y = 0; y <= rows; y += 1) {
+          const yPos = offsetY + y * cellSize + 0.5;
+          ctx.beginPath();
+          ctx.moveTo(offsetX, yPos);
+          ctx.lineTo(offsetX + canvas.width, yPos);
+          ctx.stroke();
+        }
+        for (let x = 0; x <= cols; x += 1) {
+          const xPos = offsetX + x * cellSize + 0.5;
+          ctx.beginPath();
+          ctx.moveTo(xPos, offsetY);
+          ctx.lineTo(xPos, offsetY + canvas.height);
+          ctx.stroke();
+        }
+
+        for (let y = 0; y < rows; y += 1) {
+          for (let x = 0; x < cols; x += 1) {
+            const type = board[y][x];
+            if (type) drawCell(x, y, colors[type]);
+          }
+        }
+
+        for (let y = 0; y < piece.matrix.length; y += 1) {
+          for (let x = 0; x < piece.matrix[y].length; x += 1) {
+            if (piece.matrix[y][x] && piece.y + y >= 0) {
+              drawCell(piece.x + x, piece.y + y, colors[piece.type]);
+            }
+          }
+        }
+      };
+
+      const startGame = () => {
+        if (running) return;
+        if (!piece) {
+          resetBoard();
+          score = 0;
+          scoreEl.textContent = "0";
+          piece = randomPiece();
+        }
+        running = true;
+        paused = false;
+        setStatus("Playing");
+        intervalId = setInterval(() => {
+          if (!paused) {
+            drop();
+            draw();
+          }
+        }, 650);
+      };
+
+      const stopGame = (message) => {
+        running = false;
+        paused = false;
+        clearInterval(intervalId);
+        intervalId = null;
+        setStatus(message);
+      };
+
+      const togglePause = () => {
+        if (!running) {
+          startGame();
+          return;
+        }
+        paused = !paused;
+        setStatus(paused ? "Paused" : "Playing");
+      };
+
+      const resetGame = () => {
+        stopGame("Ready");
+        piece = null;
+        resetBoard();
+        draw();
+      };
+
+      document.addEventListener("keydown", (event) => {
+        if (!piece) return;
+        if (!running && event.key !== "Escape") {
+          startGame();
+        }
+
+        if (event.key === "ArrowLeft") {
+          const testPiece = { ...piece, x: piece.x - 1 };
+          if (!collide(testPiece)) piece.x -= 1;
+        } else if (event.key === "ArrowRight") {
+          const testPiece = { ...piece, x: piece.x + 1 };
+          if (!collide(testPiece)) piece.x += 1;
+        } else if (event.key === "ArrowDown") {
+          drop();
+        } else if (event.key === "ArrowUp") {
+          tryRotate();
+        } else if (event.key === " ") {
+          hardDrop();
+        } else if (event.key === "Escape") {
+          if (!running) {
+            startGame();
+          } else {
+            togglePause();
+          }
+        } else if (event.key === "r" || event.key === "R") {
+          resetGame();
+        }
+        draw();
+      });
+
+      let touchStart = null;
+
+      canvas.addEventListener("touchstart", (event) => {
+        const touch = event.touches[0];
+        touchStart = { x: touch.clientX, y: touch.clientY };
+      });
+
+      canvas.addEventListener("touchend", (event) => {
+        if (!touchStart) return;
+        const touch = event.changedTouches[0];
+        const dx = touch.clientX - touchStart.x;
+        const dy = touch.clientY - touchStart.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance < 20) {
+          togglePause();
+        } else if (Math.abs(dx) > Math.abs(dy)) {
+          const testPiece = { ...piece, x: piece.x + (dx > 0 ? 1 : -1) };
+          if (!collide(testPiece)) piece.x = testPiece.x;
+        } else if (dy > 0) {
+          drop();
+        } else {
+          tryRotate();
+        }
+        draw();
+        touchStart = null;
+      });
+
+      resetBoard();
+      piece = randomPiece();
+      draw();
+    })();
+  </script>
+</body>
+</html>

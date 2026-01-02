@@ -3,71 +3,71 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nitin Sharma | Snake</title>
+  <title>Nitin Sharma | Sr. Software Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
 </head>
-<body class="home">
+<body class="home game-page">
   <div class="wrap">
     <div class="terminal-wrap">
       <main class="terminal scanlines terminal-square" role="region" aria-label="Terminal">
-      <div class="bar">
-        <div class="dots" aria-hidden="true">
-          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <div class="bar">
+          <div class="dots" aria-hidden="true">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+          <div class="title">nitinsharma74@github</div>
         </div>
-        <div class="title">nitinsharma74@github</div>
-      </div>
 
-      <div class="content">
-        <section class="section" aria-labelledby="snake-title">
+        <div class="content">
+          <section class="section" aria-labelledby="snake-title">
+            <div class="line">
+              <span class="prompt" id="snake-title">
+                <span class="prompt-user">nitinsharma74@github</span>
+                <span class="prompt-sym">$</span>
+              </span>
+              <span class="cmd">./play snake</span>
+            </div>
+            <div class="out game">
+              <div class="game-header">
+                <div class="game-score">
+                  Score: <span id="snake-score">0</span>
+                </div>
+                <div class="game-status" id="snake-status">Ready</div>
+              </div>
+              <canvas
+                id="snake-canvas"
+                class="game-canvas"
+                width="570"
+                height="360"
+                aria-label="Snake game board"
+                role="img"
+              ></canvas>
+              <div class="game-controls">
+                <span class="game-hint game-hint-block">
+                  Use arrow keys, WASD, or swipe to play
+                </span>
+                <span class="game-hint game-hint-block">
+                  Press Esc or tap the board to pause/resume
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <div class="hr"></div>
+
           <div class="line">
-            <span class="prompt" id="snake-title">
+            <span class="prompt">
               <span class="prompt-user">nitinsharma74@github</span>
               <span class="prompt-sym">$</span>
             </span>
-            <span class="cmd">./play snake</span>
+            <a class="cmd" href="../../index.html">cd ~ &amp;&amp; open index.html</a>
           </div>
-          <div class="out game">
-            <div class="game-header">
-              <div class="game-score">
-                Score: <span id="snake-score">0</span>
-              </div>
-              <div class="game-status" id="snake-status">Ready</div>
-            </div>
-            <canvas
-              id="snake-canvas"
-              class="game-canvas"
-              width="570"
-              height="360"
-              aria-label="Snake game board"
-              role="img"
-            ></canvas>
-            <div class="game-controls">
-              <span class="game-hint game-hint-block">
-                Use arrow keys, WASD, or swipe to play
-              </span>
-              <span class="game-hint game-hint-block">
-                Press Esc or tap the board to pause/resume
-              </span>
-            </div>
-          </div>
-        </section>
-
-        <div class="hr"></div>
-
-        <div class="line">
-          <span class="prompt">
-            <span class="prompt-user">nitinsharma74@github</span>
-            <span class="prompt-sym">$</span>
-          </span>
-          <a class="cmd" href="index.html">cd ~ &amp;&amp; open index.html</a>
         </div>
-      </div>
       </main>
     </div>
     <footer class="footer">© 2025 Nitin Sharma</footer>

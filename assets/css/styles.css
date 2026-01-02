@@ -151,10 +151,30 @@ a:hover {
 
 .terminal-square .content {
   flex: 1;
+  padding-bottom: 0;
+  gap: 6px;
+}
+
+.game-page .terminal-square {
+  aspect-ratio: auto;
 }
 
 .home .content {
   gap: 6px;
+}
+
+.game-page .terminal-square .content {
+  flex: 0 0 auto;
+  padding-bottom: 10px;
+}
+
+.game-page .terminal-wrap {
+  justify-content: center;
+  flex: 1;
+}
+
+.game-page .wrap {
+  justify-content: space-between;
 }
 
 .section {
@@ -347,6 +367,10 @@ a:hover {
   margin: 8px 0;
 }
 
+.terminal-square .hr {
+  margin: 10px 0;
+}
+
 .caret {
   display: inline-block;
   width: 8px;
@@ -381,8 +405,8 @@ a:hover {
 }
 
 @media (max-width: 520px) {
-  .status {
-    font-size: 12px;
+  .bar .status-corner {
+    display: none;
   }
 
   .content {
