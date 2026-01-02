@@ -100,7 +100,8 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 6px 14px;
+  min-height: 36px;
   border-bottom: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.02);
 }
@@ -313,8 +314,12 @@ a:hover {
 .status-corner {
   padding: 4px 0;
   font-size: 12px;
-  align-self: flex-end;
-  transform: translateX(-15px);
+}
+
+.bar .status-corner {
+  margin-left: auto;
+  transform: translateX(0);
+  line-height: 1;
 }
 
 .footer {
