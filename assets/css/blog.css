@@ -1,28 +1,107 @@
+/* ---------- BASE ---------- */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0 auto;
-  max-width: 800px;
+  max-width: 900px;
   padding: 20px;
   line-height: 1.6;
-  color: #b7f7c1;
+  color: #d6f1e2;
   background: #000;
 }
 
 h1,
 h2,
 h3 {
-  color: #34ff7a;
+  color: #8fffc2;
   margin-top: 1.2em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
-img {
-  display: block;
-  margin: 0 auto 20px;
-  max-width: 200px;
+h1 {
+  color: #7dffbf;
 }
+
+/* ---------- IMAGE GRID ---------- */
+
+.image-grid {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  gap: 24px;
+  margin: 32px 0;
+  align-items: start;
+}
+
+/* ---------- IMAGE CARD ---------- */
+
+.image-card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Image */
+.image-card img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+  border-radius: 18px;
+  border: 1px solid rgba(52, 255, 122, 0.2);
+  background: #0b0f0d;
+}
+
+.image-grid .image-card img {
+  height: auto;
+  object-fit: contain;
+}
+
+.image-card.full-width {
+  width: 100%;
+}
+
+.image-card.full-width img {
+  height: 360px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+/* Caption — tight to image */
+.image-card figcaption {
+  margin-top: 4px;           /* minimal spacing */
+  padding-left: 2px;         /* subtle alignment */
+  font-size: 0.85em;
+  font-style: italic;
+  color: rgba(214, 241, 226, 0.7);
+  text-align: left;
+}
+
+/* ---------- TEXT / CODE ---------- */
 
 a {
-  color: inherit;
+  color: #9fe8c3;
+}
+
+.back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(214, 241, 226, 0.7);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(214, 241, 226, 0.45);
+  font-size: 0.9em;
+}
+
+.back-home:hover {
+  color: #2bcf66;
+  border-bottom-style: solid;
+}
+
+.back-home-bottom {
+  margin-left: -30px;
 }
 
 code {
@@ -32,7 +111,7 @@ code {
   border: 1px solid rgba(52, 255, 122, 0.2);
   font-family: monospace;
   font-size: 0.95em;
-  color: #9fffc1;
+  color: #dff6ea;
 }
 
 pre {
@@ -41,13 +120,6 @@ pre {
   border-radius: 6px;
   border: 1px solid rgba(52, 255, 122, 0.2);
   overflow-x: auto;
-}
-
-pre code {
-  display: block;
-  padding: 0;
-  border: none;
-  color: #b7f7c1;
 }
 
 .section {
@@ -59,4 +131,17 @@ pre code {
   padding: 10px;
   border-left: 4px solid #34ff7a;
   margin: 15px 0;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 768px) {
+  .image-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .image-card img {
+    height: 280px;
+  }
 }
